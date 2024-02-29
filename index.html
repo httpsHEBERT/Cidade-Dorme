@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sorteio Cidade Dorme</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        background-color: #f3f3f3;
+      }
+      .card {
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        text-align: center;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50;
+        color: white;
+        font-size: 16px;
+        cursor: pointer; /* Adiciona a propriedade cursor:pointer; */
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .progress-bar {
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 5px;
+        margin-top: 10px;
+        display: none;
+      }
+      .progress {
+        width: 0;
+        height: 20px;
+        background-color: #4caf50;
+        border-radius: 5px;
+      }
+      #functionDisplay {
+        display: none;
+        font-size: 24px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      #endMessage {
+        display: none;
+      }
+      footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+      }
+      .player-button-container {
+        display: flex;
+        justify-content: center;
+      }
+      .green-text {
+        color: #008000;
+      }
+      .red-text {
+        color: #ff0000;
+      }
+      .purple-text {
+        color: #800080;
+      }
+      .orange-text {
+        color: #ffa500;
+      }
+      .btn-container {
+        margin-top: 20px;
+      }
+      .restart-button {
+        background-color: #f44336;
+      }
+      .restart-button:hover {
+        background-color: #d32f2f;
+      }
+      .input-container {
+        margin-bottom: 20px;
+      }
+      .input-label {
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+      .input-field {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h2>Cidade Dorme</h2>
+        <button onclick="startGame()">Iniciar</button>
+        <div
+          id="playerCountInput"
+          style="display: none"
+          class="input-container"
+        >
+          <label for="playerCount" class="input-label"
+            >Quantidade de Jogadores:</label
+          >
+          <br />
+          <input
+            type="number"
+            id="playerCount"
+            min="6"
+            required
+            class="input-field"
+          />
+          <br />
+          <button onclick="confirmPlayers()">Confirmar</button>
+        </div>
+        <div class="player-button-container">
+          <button
+            id="playerButton"
+            style="display: none"
+            onclick="revealFunction()"
+          >
+            Jogador 1
+          </button>
+        </div>
+        <div id="functionDisplay"></div>
+        <div class="progress-bar">
+          <div id="progress" class="progress"></div>
+        </div>
+        <div id="endMessage">Bom Jogo!</div>
+        <div class="btn-container" id="restartButton" style="display: none">
+          <button class="restart-button" onclick="restartGame()">
+            Reiniciar Jogo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer>by @hebertluisoficial | VS Code & Chat GPT</footer>
+
+    <script>
+      let playerCount;
+      let functions = [];
+      let currentPlayer = 0;
+
+      function startGame() {
+        document.getElementById("playerCountInput").style.display = "block";
+        document.querySelector("button").style.display = "none";
+      }
+
+      function confirmPlayers() {
+        const playerCountInput = document.getElementById("playerCount");
+        const inputValue = parseInt(playerCountInput.value);
+        if (!inputValue || inputValue < 6) {
+          alert(
+            "Por favor, insira um número válido de jogadores (mínimo de 6)."
+          );
+        } else {
+          playerCount = inputValue;
+          document.getElementById("playerCountInput").style.display = "none";
+          document.getElementById("playerButton").style.display = "block";
+          document.getElementById("playerButton").textContent = "Jogador 1";
+          document.querySelector(".progress-bar").style.display = "block";
+          generateFunctions();
+          updateProgressBar();
+        }
+      }
+
+      function generateFunctions() {
+        functions = ["Leproso", "Profeta", "Sacerdote"];
+        const remainingPlayers = playerCount - functions.length;
+        for (let i = 0; i < remainingPlayers; i++) {
+          functions.push("Aldeão");
+        }
+        shuffleArray(functions);
+      }
+
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+
+      function revealFunction() {
+        const playerButton = document.getElementById("playerButton");
+        playerButton.disabled = true;
+        const functionDisplay = document.getElementById("functionDisplay");
+        const functionText = functions[currentPlayer];
+        functionDisplay.textContent = functionText;
+        functionDisplay.style.display = "block";
+        functionDisplay.classList.remove(
+          "green-text",
+          "red-text",
+          "purple-text",
+          "orange-text"
+        ); // Remover todas as classes de cor
+        if (functionText === "Aldeão") {
+          functionDisplay.classList.add("green-text");
+        } else if (functionText === "Leproso") {
+          functionDisplay.classList.add("red-text");
+        } else if (functionText === "Sacerdote") {
+          functionDisplay.classList.add("purple-text");
+        } else if (functionText === "Profeta") {
+          functionDisplay.classList.add("orange-text");
+        }
+        document.querySelector(".progress-bar").style.display = "block";
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 1;
+          document.getElementById("progress").style.width = progress + "%";
+          if (progress >= 100) {
+            clearInterval(interval);
+            functionDisplay.style.display = "none";
+            currentPlayer++;
+            if (currentPlayer < playerCount) {
+              playerButton.textContent = "Jogador " + (currentPlayer + 1);
+              playerButton.disabled = false;
+              updateProgressBar();
+            } else {
+              document.querySelector(".progress-bar").style.display = "none";
+              document.getElementById("endMessage").style.display = "block";
+              document.getElementById("restartButton").style.display = "block";
+              playerButton.style.display = "none"; // Esconder o botão do último jogador
+            }
+          }
+        }, 20);
+      }
+
+      function updateProgressBar() {
+        document.getElementById("progress").style.width = "0%";
+      }
+
+      function restartGame() {
+        location.reload();
+      }
+    </script>
+  </body>
+</html>
