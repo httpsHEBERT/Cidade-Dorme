@@ -30,13 +30,13 @@
         margin: 10px;
         border: none;
         border-radius: 5px;
-        background-color: #4caf50;
+        background-color: #2196f3;
         color: white;
         font-size: 16px;
-        cursor: pointer; /* Adiciona a propriedade cursor:pointer; */
+        cursor: pointer;
       }
       button:hover {
-        background-color: #45a049;
+        background-color: #0b7dda;
       }
       .progress-bar {
         width: 100%;
@@ -48,7 +48,6 @@
       .progress {
         width: 0;
         height: 20px;
-        background-color: #4caf50;
         border-radius: 5px;
       }
       #functionDisplay {
@@ -99,7 +98,6 @@
       }
       .input-label {
         font-size: 18px;
-        margin-bottom: 5px;
       }
       .input-field {
         padding: 10px;
@@ -108,6 +106,22 @@
         font-size: 16px;
         width: 100%;
         box-sizing: border-box;
+        margin-bottom: 1rem;
+      }
+      /* Animação do título */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      h2 {
+        animation: pulse 2s infinite;
       }
     </style>
   </head>
@@ -115,15 +129,15 @@
     <div class="container">
       <div class="card">
         <h2>Cidade Dorme</h2>
-        <button onclick="startGame()">Iniciar</button>
+        <button onclick="startGame()">INICIAR</button>
         <div
           id="playerCountInput"
           style="display: none"
           class="input-container"
         >
           <label for="playerCount" class="input-label"
-            >Quantidade de Jogadores:</label
-          >
+            >Quantidade de Jogadores: <br
+          /></label>
           <br />
           <input
             type="number"
@@ -133,7 +147,7 @@
             class="input-field"
           />
           <br />
-          <button onclick="confirmPlayers()">Confirmar</button>
+          <button onclick="confirmPlayers()">CONFIRMAR</button>
         </div>
         <div class="player-button-container">
           <button
@@ -151,14 +165,12 @@
         <div id="endMessage">Bom Jogo!</div>
         <div class="btn-container" id="restartButton" style="display: none">
           <button class="restart-button" onclick="restartGame()">
-            Reiniciar Jogo
+            RECOMEÇAR
           </button>
         </div>
       </div>
     </div>
-
-    <footer>by @hebertluisoficial | VS Code & Chat GPT</footer>
-
+    <footer>by @hebertluisoficial | VS Code & ChatGPT</footer>
     <script>
       let playerCount;
       let functions = [];
@@ -218,12 +230,16 @@
         ); // Remover todas as classes de cor
         if (functionText === "Aldeão") {
           functionDisplay.classList.add("green-text");
+          document.querySelector(".progress").style.backgroundColor = "#008000";
         } else if (functionText === "Leproso") {
           functionDisplay.classList.add("red-text");
+          document.querySelector(".progress").style.backgroundColor = "#ff0000";
         } else if (functionText === "Sacerdote") {
           functionDisplay.classList.add("purple-text");
+          document.querySelector(".progress").style.backgroundColor = "#800080";
         } else if (functionText === "Profeta") {
           functionDisplay.classList.add("orange-text");
+          document.querySelector(".progress").style.backgroundColor = "#ffa500";
         }
         document.querySelector(".progress-bar").style.display = "block";
         let progress = 0;
@@ -245,7 +261,7 @@
               playerButton.style.display = "none"; // Esconder o botão do último jogador
             }
           }
-        }, 20);
+        }, 10); // Alterei o tempo de exibição para 1 segundo
       }
 
       function updateProgressBar() {
